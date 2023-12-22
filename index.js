@@ -56,6 +56,7 @@ async function run() {
 
 
 
+
 //tasks collection
 
 app.post('/tasks',async(req,res)=>{
@@ -73,22 +74,28 @@ app.get('/tasks',async(req,res)=>{
 
 
 app.patch('/tasks/:id',async(req,res)=>{
-    // const id=req.params.id;
+    const id=req.params.id;
     const filter={_id:new ObjectId(id)}
     const options = { upsert: true };
 //  console.log(id);
     const updatedStatus=req.body;
-    console.log(updatedStatus);
+    // console.log(updatedStatus);
     const updatedDoc={
-       $set:{
-
-           
+       $set:{ 
             status:updatedStatus.status
        }
     }
 
     const result=await taskCollection.updateOne(filter,updatedDoc,options)
     res.send(result)
+})
+
+app.delete('/tasks/:id',async(req,res)=>{
+       const id=req.params.id;
+       const query={_id:new ObjectId(id)}
+       const result=await taskCollection.deleteOne(query)
+       res.send(result)
+       
 })
 
 
